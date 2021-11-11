@@ -69,6 +69,19 @@ BooleanMatrix		convertThreePointMatrixToDoublePointMatrix(const BooleanMatrix& m
 	return (resMatrix);
 }
 
+/**
+ * @brief Проверка принадлежности к вершине
+ * 
+ * @param vertices вершина
+ * @param vector вектор, который проверяется на принадлежность вершине
+ * @return true принадлежит вершине
+ * @return false не принадлежит вершине 
+ */
+bool		checkBelongVertices(BooleanMatrix vertices, BooleanMatrix vector)
+{
+	
+}
+
 BooleanMatrix		threePointMatrixInverse()
 {
 	BooleanMatrix resMatrix(kJInverse, kQuantityElements);
