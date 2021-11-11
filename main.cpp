@@ -46,24 +46,66 @@ BooleanMatrix		threePointMatrix()
 	return (resMatrix);
 }
 
+bool		nextSet(std::vector<uint_t>& set, int n, int m)
+{
+	int i(m - 1);
+
+	while (i >= 0 && set[i] == n)
+		i--;
+	if (i < 0)
+		return (false);
+	if (set[i] >= n)
+		i--;
+	set[i]++;
+	if (i == m - 1)
+		return (true);
+	for (uint_t j = i + 1; j < m; j++)
+		set[j] = 1;
+
+	return (true);
+}
+
+void		addRowToDoubleMatrix(BooleanMatrix& matrix, const std::vector<std::string>& rowBuffer,
+								const std::vector<uint_t>& rowBoolValues)
+{
+	uint_t lastRowIdx(matrix.rows());
+	uint_t boolValsIdx(0);
+
+	for (uint_t i = 0; i < rowBuffer.size(); i++)
+	{
+		if (rowBuffer[i] == "-")
+			matrix(lastRowIdx, i) = std::to_string(rowBoolValues[boolValsIdx++] - 1);
+		else
+			matrix(lastRowIdx, i) = rowBuffer[i];
+	}
+}
+
 BooleanMatrix		convertThreePointMatrixToDoublePointMatrix(const BooleanMatrix& matrix)
 {
+	constexpr uint_t n(2);
 	BooleanMatrix resMatrix(1, kQuantityElements);
+	std::vector<uint_t> set;
+	std::vector<std::string> rowBuffer;
 	uint_t iRes;
+	uint_t dashCount;
 
 	iRes = 0;
-	for (uint_t i = 0; i < kJ; i++)
+	for (uint_t i = 0; i < matrix.rows(); i++)
 	{
-		for (uint_t j = 0; j < kQuantityElements; j++)
+		dashCount = 0;
+		for (uint_t j = 0; j < matrix.cols(); j++)
 		{
 			if (matrix(i, j) == "-")
-			{
-
-				resMatrix(i, j) = "1";
-			}
-			else
-				resMatrix(i, j) = matrix(i, j);
+				dashCount++;
+			rowBuffer.push_back(matrix(i, j));
 		}
+		if (dashCount > 0)
+		{
+			set = std::vector<uint_t>(dashCount, 1);
+			while (nextSet(set, n, dashCount))
+				addRowToDoubleMatrix(resMatrix, rowBuffer, set);
+		}
+		rowBuffer.clear();
 	}
 
 	return (resMatrix);
@@ -130,6 +172,17 @@ int main()
 
 
 	a.printMatrix();
+
+	BooleanMatrix test(2, 3);
+	test(0, 0) = "0";
+	test(0, 1) = "-";
+	test(0, 2) = "-";
+	test(1, 0) = "-";
+	test(1, 1) = "0";
+	test(1, 2) = "0";
+
+	BooleanMatrix b(convertThreePointMatrixToDoublePointMatrix(test));
+	b.printMatrix();
 
 	return (0);
 }

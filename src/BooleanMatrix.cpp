@@ -139,6 +139,16 @@ void		BooleanMatrix::printMatrix()
 	}
 }
 
+uint_t BooleanMatrix::rows() const
+{
+	return (sizeRows_);
+}
+
+uint_t BooleanMatrix::cols() const
+{
+	return (sizeCols_);
+}
+
 /**
  * @brief 
  * 
