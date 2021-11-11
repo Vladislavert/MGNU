@@ -23,6 +23,8 @@ class BooleanMatrix
 		std::string&			operator()(const uint_t i, const uint_t j);
 		const std::string&		operator()(const uint_t i, const uint_t j) const;
 		void					printMatrix();
+		uint_t					rows() const;
+		uint_t					cols() const;
 
 	private:
 		std::vector<std::vector<std::string>>	matrix_;
