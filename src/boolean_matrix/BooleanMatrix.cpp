@@ -127,20 +127,11 @@ BooleanMatrix&			BooleanMatrix::operator*=(const BooleanMatrix& matrix)
 		BooleanMatrix retEmptyMatrix(1, 1);
 
 		retEmptyMatrix(0, 0) = "empty matrix";
-		if (this != &retEmptyMatrix)
-		{
-			matrix_ = retEmptyMatrix.matrix_;
-			sizeRows_ = retEmptyMatrix.sizeRows_;
-			sizeCols_ = retEmptyMatrix.sizeCols_;
-		}
+		*this = retEmptyMatrix;
 		return (*this);
 	}
-	if (this != &retMatrix)
-	{
-		matrix_ = retMatrix.matrix_;
-		sizeRows_ = retMatrix.sizeRows_;
-		sizeCols_ = retMatrix.sizeCols_;
-	}
+	*this = retMatrix;
+
 	return (*this);
 }
 
@@ -245,7 +236,7 @@ BooleanMatrix		BooleanMatrix::row(uint_t index)
 	return (retLine);
 }
 
-// uint_t BooleanMatrix::cols() const
+// uint_t BooleanMatrix::col() const
 // {
 // 	return (sizeCols_);
 // }
@@ -288,11 +279,11 @@ std::string		BooleanMatrix::product(const std::string& arg1, const std::string& 
 }
 
 /**
- * @brief Проверка на получение - при умножении
+ * @brief Проверка на получение "-" при умножении
  * 
  * @param arg1
  * @param arg2 
- * @return true если при умножении получается -
+ * @return true если при умножении получается "-"
  * @return false 
  */
 bool		BooleanMatrix::isProductDash(const std::string& arg1, const std::string& arg2)
@@ -304,11 +295,11 @@ bool		BooleanMatrix::isProductDash(const std::string& arg1, const std::string& a
 }
 
 /**
- * @brief Проверка на получении 1 при умножении
+ * @brief Проверка на получении "1" при умножении
  * 
  * @param arg1 
  * @param arg2 
- * @return true если при умножении получается 1
+ * @return true если при умножении получается "1"
  * @return false 
  */
 bool		BooleanMatrix::isProductOne(const std::string& arg1, const std::string& arg2)
@@ -322,11 +313,11 @@ bool		BooleanMatrix::isProductOne(const std::string& arg1, const std::string& ar
 }
 
 /**
- * @brief Проверка на получении 0 при умножении
+ * @brief Проверка на получении "0" при умножении
  * 
  * @param arg1 
  * @param arg2 
- * @return true если при умножении получается 0
+ * @return true если при умножении получается "0"
  * @return false 
  */
 bool		BooleanMatrix::isProductZero(const std::string& arg1, const std::string& arg2)
@@ -381,13 +372,6 @@ BooleanMatrix		BooleanMatrix::lineNegation(const BooleanMatrix& line)
 			indexOneAndZero.push_back(i);
 	sizeRows = line.cols() - indexDash.size();
 	retMatrix(sizeRows, line.cols());
-	// for (uint_t i = 0; i < sizeRows; i++)
-	// {
-	// 	if (i == indexOneAndZero[0])
-	// 		retMatrix(0, i) = line(0, indexOneAndZero[0]);
-	// 	else
-	// 		retMatrix(0, i) = "-";
-	// }
 	for (uint_t i = 0; i < sizeRows; i++)
 	{
 		for (uint_t j = 0; j < line.cols(); j++)
