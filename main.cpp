@@ -168,21 +168,96 @@ int main()
 	std::cout << std::endl;
 	matrix.printMatrix();
 
+	// BooleanMatrix a(1, kQuantityElements);
+
+
+	// a.printMatrix();
+
+	// BooleanMatrix a(1, kQuantityElements);
+	// BooleanMatrix b(1, kQuantityElements);
+	// BooleanMatrix res(1, kQuantityElements);
+
 	BooleanMatrix a(1, kQuantityElements);
+	BooleanMatrix b(1, kQuantityElements);
+	BooleanMatrix res(1, kQuantityElements);
+
+	// a(0, 0) = "1";
+	// a(0, 1) = "-";
+	// a(0, 2) = "1";
+	// a(0, 3) = "1";
+	// a(0, 4) = "1";
+	// a(0, 5) = "1";
+	// a(0, 6) = "-";
+	// a(0, 7) = "-";
+	// a(0, 8) = "-";
+	// a(0, 9) = "1";
+
+	// b(0, 0) = "1";
+	// b(0, 1) = "-";
+	// b(0, 2) = "1";
+	// b(0, 3) = "1";
+	// b(0, 4) = "1";
+	// b(0, 5) = "1";
+	// b(0, 6) = "-";
+	// b(0, 7) = "-";
+	// b(0, 8) = "-";
+	// b(0, 9) = "1";
+
+	// b(0, 0) = "1";
+	// b(0, 1) = "0";
+	// b(0, 2) = "1";
+	// b(0, 3) = "1";
+	// b(0, 4) = "1";
+	// b(0, 5) = "1";
+	// b(0, 6) = "-";
+	// b(0, 7) = "-";
+	// b(0, 8) = "0";
+	// b(0, 9) = "1";
 
 
-	a.printMatrix();
+	a(0, 0) = "1";
+	a(0, 1) = "1";
+	a(0, 2) = "1";
+	a(0, 3) = "1";
+	a(0, 4) = "1";
+	a(0, 5) = "1";
+	a(0, 6) = "0";
+	a(0, 7) = "0";
+	a(0, 8) = "0";
+	a(0, 9) = "1";
 
-	BooleanMatrix test(2, 3);
-	test(0, 0) = "0";
-	test(0, 1) = "-";
-	test(0, 2) = "-";
-	test(1, 0) = "-";
-	test(1, 1) = "0";
-	test(1, 2) = "0";
+	b(0, 0) = "1";
+	b(0, 1) = "1";
+	b(0, 2) = "1";
+	b(0, 3) = "1";
+	b(0, 4) = "1";
+	b(0, 5) = "1";
+	b(0, 6) = "0";
+	b(0, 7) = "0";
+	b(0, 8) = "0";
+	b(0, 9) = "1";
 
-	BooleanMatrix b(convertThreePointMatrixToDoublePointMatrix(test));
-	b.printMatrix();
+	res = a * b;
+	std::cout << std::endl;
+	res.printMatrix();
+
+
+	BooleanMatrix testNegation(2, 3);
+
+
+	testNegation(0, 0) = "0";
+	testNegation(0, 1) = "1";
+	testNegation(0, 2) = "-";
+	testNegation(1, 0) = "1";
+	testNegation(1, 1) = "-";
+	testNegation(1, 2) = "0";
+
+	testNegation.row(0).printMatrix();
+	std::cout << std::endl;
+
+	std::cout << "result:" << std::endl;
+
+	testNegation.negation().printMatrix();
 
 	return (0);
 }

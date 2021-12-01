@@ -41,65 +41,116 @@ BooleanMatrix& BooleanMatrix::operator=(const BooleanMatrix& matrix)
 
 BooleanMatrix		BooleanMatrix::operator*(const BooleanMatrix& matrix)
 {
-	uint_t	i(0);
-	uint_t	j(0);
-	uint_t	resSizeRows = calculateSizeRows_(sizeRows_, matrix.sizeRows_);
-	BooleanMatrix	resMatrix(resSizeRows, sizeCols_);
-	std::vector<uint_t>			indexDelete;
+	uint_t				i(0);
+	uint_t				j(0);
+	uint_t				retSizeRows = calculateSizeRows_(sizeRows_, matrix.sizeRows_);
+	BooleanMatrix		retMatrix(retSizeRows, sizeCols_);
+	std::vector<uint_t>	indexDelete;
 
 	for (uint_t iRows = 0; iRows < sizeRows_; iRows++)
 	{
 		for (uint_t kRows = 0; kRows < matrix.sizeRows_; kRows++)
 			for (uint_t jCols = 0, lCols = 0, j = 0; jCols < sizeCols_; jCols++, lCols++, j++)
 			{
-				resMatrix(i, j) = product(matrix_[iRows][jCols], matrix.matrix_[kRows][lCols]);
-				// if (resMatrix(i, j) == "-1")
-				// {
-				// 	BooleanMatrix resEmptyMatrix(1, 1);
-				// 	resEmptyMatrix(0, 0) = "empty matrix";
-				// 	return (resEmptyMatrix);
-				// }
-				if (resMatrix(i, j) == "-1")
+				retMatrix(i, j) = product(matrix_[iRows][jCols], matrix.matrix_[kRows][lCols]);
+				if (retMatrix(i, j) == "-1")
 				{
 					indexDelete.push_back(i);
 				}
-				else if (((kRows == 0 && lCols == matrix.sizeCols_ - 1) || (kRows == 1 &&lCols == matrix.sizeCols_ - 1)) && i < resSizeRows)
+				else if (((kRows == 0 && lCols == matrix.sizeCols_ - 1) || (kRows == 1 && lCols == matrix.sizeCols_ - 1)) && i < retSizeRows)
 				{
 					i++;
 				}
 			}
 	}
-	for (uint_t i = 0; i < indexDelete.size(); i++)
+	for (uint_t i = 0; i < ((indexDelete.size() > retSizeRows) ? retSizeRows : indexDelete.size()); i++)
 	{
 		if (i == 0)
-			resMatrix.matrix_.erase(resMatrix.matrix_.begin() + (indexDelete[i]));
+			retMatrix.matrix_.erase(retMatrix.matrix_.begin() + (indexDelete[i]));
 		else
-			resMatrix.matrix_.erase(resMatrix.matrix_.begin() + (indexDelete[i] - i));
+			retMatrix.matrix_.erase(retMatrix.matrix_.begin() + (indexDelete[i] - i));
 	}
-	resMatrix.sizeRows_ -= indexDelete.size();
+	if (indexDelete.size() > retSizeRows)
+		retMatrix.sizeRows_ -= 1;
+	else
+		retMatrix.sizeRows_ -= indexDelete.size();
 
-	return (resMatrix);
+	if (retMatrix.sizeRows_ == 0)
+	{
+		BooleanMatrix retEmptyMatrix(1, 1);
+
+		retEmptyMatrix(0, 0) = "empty matrix";
+		return (retEmptyMatrix);
+	}
+
+	return (retMatrix);
 }
 
-/**
- * @brief 
- * 
- * @param matrix 
- * @return BooleanMatrix 
- */
-BooleanMatrix		BooleanMatrix::operator+(const BooleanMatrix& matrix)
+BooleanMatrix&			BooleanMatrix::operator*=(const BooleanMatrix& matrix)
 {
-	BooleanMatrix	resMatrix(sizeRows_ + matrix.sizeRows_, 1);
+	uint_t				i(0);
+	uint_t				j(0);
+	uint_t				retSizeRows = calculateSizeRows_(sizeRows_, matrix.sizeRows_);
+	BooleanMatrix		retMatrix(retSizeRows, sizeCols_);
+	std::vector<uint_t>	indexDelete;
 
 	for (uint_t iRows = 0; iRows < sizeRows_; iRows++)
-		resMatrix.matrix_[iRows] = matrix_[iRows];
+	{
+		for (uint_t kRows = 0; kRows < matrix.sizeRows_; kRows++)
+			for (uint_t jCols = 0, lCols = 0, j = 0; jCols < sizeCols_; jCols++, lCols++, j++)
+			{
+				retMatrix(i, j) = product(matrix_[iRows][jCols], matrix.matrix_[kRows][lCols]);
+				if (retMatrix(i, j) == "-1")
+				{
+					indexDelete.push_back(i);
+				}
+				else if (((kRows == 0 && lCols == matrix.sizeCols_ - 1) || (kRows == 1 && lCols == matrix.sizeCols_ - 1)) && i < retSizeRows)
+				{
+					i++;
+				}
+			}
+	}
+	for (uint_t i = 0; i < ((indexDelete.size() > retSizeRows) ? retSizeRows : indexDelete.size()); i++)
+	{
+		if (i == 0)
+			retMatrix.matrix_.erase(retMatrix.matrix_.begin() + (indexDelete[i]));
+		else
+			retMatrix.matrix_.erase(retMatrix.matrix_.begin() + (indexDelete[i] - i));
+	}
+	if (indexDelete.size() > retSizeRows)
+		retMatrix.sizeRows_ -= 1;
+	else
+		retMatrix.sizeRows_ -= indexDelete.size();
+
+	if (retMatrix.sizeRows_ == 0)
+	{
+		BooleanMatrix retEmptyMatrix(1, 1);
+
+		retEmptyMatrix(0, 0) = "empty matrix";
+		return (retEmptyMatrix);
+	}
+	if (this != &retMatrix)
+	{
+		matrix_ = retMatrix.matrix_;
+		sizeRows_ = retMatrix.sizeRows_;
+		sizeCols_ = retMatrix.sizeCols_;
+	}
+	return (*this);
+}
+
+BooleanMatrix		BooleanMatrix::operator+(const BooleanMatrix& matrix)
+{
+	BooleanMatrix	retMatrix(sizeRows_ + matrix.sizeRows_, 1);
+
+	for (uint_t iRows = 0; iRows < sizeRows_; iRows++)
+		retMatrix.matrix_[iRows] = matrix_[iRows];
 	for (uint_t iRows = sizeRows_, iRowsNext = 0; iRowsNext < matrix.sizeRows_; iRows++, iRowsNext++)
-		resMatrix.matrix_[iRows] = matrix.matrix_[iRowsNext];
+		retMatrix.matrix_[iRows] = matrix.matrix_[iRowsNext];
 
-	resMatrix.sizeRows_ = sizeRows_ + matrix.sizeRows_;
-	resMatrix.sizeCols_ = sizeCols_;
+	retMatrix.sizeRows_ = sizeRows_ + matrix.sizeRows_;
+	retMatrix.sizeCols_ = sizeCols_;
 
-	return (resMatrix);
+	return (retMatrix);
 }
 
 /**
@@ -119,12 +170,33 @@ std::string&		BooleanMatrix::operator()(const uint_t i, const uint_t j)
 	return (matrix_[i][j]);
 }
 
-const std::string& BooleanMatrix::operator()(const uint_t i, const uint_t j) const
+const		std::string& BooleanMatrix::operator()(const uint_t i, const uint_t j) const
 {
 	if (i >= sizeRows_ || j >= sizeCols_)
 		throw OutOfBoundsException();
 	
 	return (matrix_[i][j]);
+}
+
+/**
+ * @brief Нахождение отрицания
+ * 
+ * @return отрицательная матрица 
+ */
+BooleanMatrix		BooleanMatrix::negation()
+{
+	BooleanMatrix	retMatrix(1, sizeCols_);
+	BooleanMatrix	tempMatrix(sizeRows_, sizeCols_);
+
+	tempMatrix.matrix_ = matrix_;
+
+	retMatrix = lineNegation(tempMatrix.row(0));
+	for (uint_t i = 1; i < sizeRows_; i++)
+	{
+		retMatrix *= lineNegation(tempMatrix.row(i));
+	}
+
+	return (retMatrix);
 }
 
 void		BooleanMatrix::printMatrix()
@@ -139,18 +211,41 @@ void		BooleanMatrix::printMatrix()
 	}
 }
 
-uint_t BooleanMatrix::rows() const
+uint_t		BooleanMatrix::rows() const
 {
 	return (sizeRows_);
 }
 
-uint_t BooleanMatrix::cols() const
+uint_t		BooleanMatrix::cols() const
 {
 	return (sizeCols_);
 }
 
 /**
- * @brief 
+ * @brief возвращает строку матрицы по указанному индексу
+ * 
+ * @param index 
+ * @return BooleanMatrix 
+ */
+BooleanMatrix		BooleanMatrix::row(uint_t index)
+{
+	BooleanMatrix	retLine(1, sizeCols_);
+
+	for (uint_t i = 0; i < sizeCols_; i++)
+	{
+		retLine(0, i) = matrix_[index][i];
+	}
+	
+	return (retLine);
+}
+
+// uint_t BooleanMatrix::cols() const
+// {
+// 	return (sizeCols_);
+// }
+
+/**
+ * @brief добавление строк
  * 
  */
 void		BooleanMatrix::addRows()
@@ -159,7 +254,7 @@ void		BooleanMatrix::addRows()
 }
 
 /**
- * @brief 
+ * @brief добавление столбцов
  * 
  */
 void		BooleanMatrix::addCols()
@@ -172,41 +267,42 @@ void		BooleanMatrix::addCols()
 
 std::string		BooleanMatrix::product(const std::string& arg1, const std::string& arg2)
 {
-	std::string	resSymbol;
+	std::string	retSymbol;
 
 	if (isProductDash(arg1, arg2))
-		resSymbol = "-";
+		retSymbol = "-";
 	else if (isProductOne(arg1, arg2))
-		resSymbol = "1";
+		retSymbol = "1";
 	else if (isProductZero(arg1, arg2))
-		resSymbol = "0";
+		retSymbol = "0";
 	else
-		resSymbol = "-1";
+		retSymbol = "-1";
 
-	return (resSymbol);
+	return (retSymbol);
 }
 
 /**
- * @brief 
+ * @brief Проверка на получение - при умножении
  * 
- * @param arg1 
+ * @param arg1
  * @param arg2 
- * @return true 
+ * @return true если при умножении получается -
  * @return false 
  */
 bool		BooleanMatrix::isProductDash(const std::string& arg1, const std::string& arg2)
 {
 	if ((arg1 == "-") && (arg2 == "-"))
 		return (true);
+
 	return (false);
 }
 
 /**
- * @brief 
+ * @brief Проверка на получении 1 при умножении
  * 
  * @param arg1 
  * @param arg2 
- * @return true 
+ * @return true если при умножении получается 1
  * @return false 
  */
 bool		BooleanMatrix::isProductOne(const std::string& arg1, const std::string& arg2)
@@ -219,6 +315,14 @@ bool		BooleanMatrix::isProductOne(const std::string& arg1, const std::string& ar
 	return (false);
 }
 
+/**
+ * @brief Проверка на получении 0 при умножении
+ * 
+ * @param arg1 
+ * @param arg2 
+ * @return true если при умножении получается 0
+ * @return false 
+ */
 bool		BooleanMatrix::isProductZero(const std::string& arg1, const std::string& arg2)
 {
 	if (((arg1 == "0") && ((arg2 == "0") || (arg2 == "-"))) ||
@@ -229,14 +333,65 @@ bool		BooleanMatrix::isProductZero(const std::string& arg1, const std::string& a
 	return (false);
 }
 
+/**
+ * @brief Рассчёт кол-ва строк, которое получаем при умножении
+ * 
+ * @param sizeRows1 размер строки первого множителя
+ * @param sizeRows2 размер строки второго множителя
+ * @return uint_t 
+ */
 uint_t		BooleanMatrix::calculateSizeRows_(uint_t sizeRows1, uint_t sizeRows2)
 {
-	uint_t	resSizeRows(0);
+	uint_t	retSizeRows(0);
 
 	for (uint_t i = 0; i < sizeRows1; i++)
 	{
-		resSizeRows += sizeRows2;
+		retSizeRows += sizeRows2;
 	}
 
-	return (resSizeRows);
+	return (retSizeRows);
+}
+
+/**
+ * @brief нахождение отрицание для троичной строки
+ * 
+ * @param line троичная строка
+ * @return матрицы отрицания для троичной строки
+ */
+BooleanMatrix		BooleanMatrix::lineNegation(const BooleanMatrix& line)
+{
+	BooleanMatrix		retMatrix(1, sizeCols_);
+	uint_t				sizeRows = 0;
+	std::vector<uint_t>	indexDash;
+	std::vector<uint_t> indexOneAndZero;
+
+	//TODO(vladislavert): написать проверку, на аргумент функции(должна быть строка)
+
+	for (uint_t i = 0; i < line.cols(); i++)
+		if (line(0, i) == "-")
+			indexDash.push_back(i);
+	for (uint_t i = 0; i < line.cols(); i++)
+		if (line(0, i) == "1" || line(0, i) == "0")
+			indexOneAndZero.push_back(i);
+	sizeRows = line.cols() - indexDash.size();
+	retMatrix(sizeRows, line.cols());
+	// for (uint_t i = 0; i < sizeRows; i++)
+	// {
+	// 	if (i == indexOneAndZero[0])
+	// 		retMatrix(0, i) = line(0, indexOneAndZero[0]);
+	// 	else
+	// 		retMatrix(0, i) = "-";
+	// }
+	for (uint_t i = 0; i < sizeRows; i++)
+	{
+		for (uint_t j = 0; j < line.cols(); j++)
+		{
+			if (j == indexOneAndZero[i])
+				retMatrix(i, j) = line(0, indexOneAndZero[i]) == "1" ? "0" : "1";
+			else
+				retMatrix(i, j) = "-";
+		}
+	}
+
+	return (retMatrix);
 }
