@@ -127,7 +127,13 @@ BooleanMatrix&			BooleanMatrix::operator*=(const BooleanMatrix& matrix)
 		BooleanMatrix retEmptyMatrix(1, 1);
 
 		retEmptyMatrix(0, 0) = "empty matrix";
-		return (retEmptyMatrix);
+		if (this != &retEmptyMatrix)
+		{
+			matrix_ = retEmptyMatrix.matrix_;
+			sizeRows_ = retEmptyMatrix.sizeRows_;
+			sizeCols_ = retEmptyMatrix.sizeCols_;
+		}
+		return (*this);
 	}
 	if (this != &retMatrix)
 	{

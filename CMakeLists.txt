@@ -11,12 +11,13 @@ set(CMAKE_CXX_FLAGS "${COMMON_FLAGS}")
 
 include_directories(
 		inc
+		src/boolean_matrix
  		${CMAKE_CURRENT_SOURCE_DIR}
  		${EIGEN3_INCLUDE_DIR}
 	)
 
 set(CPP_FILES 
-	src/BooleanMatrix.cpp
+	src/boolean_matrix/BooleanMatrix.cpp
 )
 
 add_library(booleanMatrix STATIC ${CPP_FILES})
