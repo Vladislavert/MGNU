@@ -39,6 +39,7 @@ BooleanMatrix& BooleanMatrix::operator=(const BooleanMatrix& matrix)
 	return (*this);
 }
 
+//TODO(Vladislavert): Пофиксить умножение
 BooleanMatrix		BooleanMatrix::operator*(const BooleanMatrix& matrix)
 {
 	uint_t				i(0);
@@ -47,34 +48,28 @@ BooleanMatrix		BooleanMatrix::operator*(const BooleanMatrix& matrix)
 	BooleanMatrix		retMatrix(retSizeRows, sizeCols_);
 	std::vector<uint_t>	indexDelete;
 
-	for (uint_t iRows = 0; iRows < sizeRows_; iRows++)
+	for (uint_t iRows = 0; iRows < sizeRows_; iRows++) // перебор по строкам 1-ой матрицы
 	{
-		for (uint_t kRows = 0; kRows < matrix.sizeRows_; kRows++)
+		for (uint_t kRows = 0; kRows < matrix.sizeRows_; kRows++) // перебор по строкам 2-ой матрицы
 			for (uint_t jCols = 0, lCols = 0, j = 0; jCols < sizeCols_; jCols++, lCols++, j++)
 			{
 				retMatrix(i, j) = product(matrix_[iRows][jCols], matrix.matrix_[kRows][lCols]);
+				retMatrix.printMatrix();
 				if (retMatrix(i, j) == "-1")
 				{
 					indexDelete.push_back(i);
+					retMatrix.sizeRows_ -= 1;
+					retMatrix.matrix_.erase(retMatrix.matrix_.end() - 1);
+
+					break ;
 				}
-				else if (((kRows == 0 && lCols == matrix.sizeCols_ - 1) || (kRows == 1 && lCols == matrix.sizeCols_ - 1)) && i < retSizeRows)
+				// else if (((kRows == 0 && lCols == matrix.sizeCols_ - 1) || (kRows == 1 && lCols == matrix.sizeCols_ - 1)) && i < retSizeRows)
+				else if ((lCols == matrix.sizeCols_ - 1) && i < retSizeRows)
 				{
 					i++;
 				}
 			}
 	}
-	for (uint_t i = 0; i < ((indexDelete.size() > retSizeRows) ? retSizeRows : indexDelete.size()); i++)
-	{
-		if (i == 0)
-			retMatrix.matrix_.erase(retMatrix.matrix_.begin() + (indexDelete[i]));
-		else
-			retMatrix.matrix_.erase(retMatrix.matrix_.begin() + (indexDelete[i] - i));
-	}
-	if (indexDelete.size() > retSizeRows)
-		retMatrix.sizeRows_ -= 1;
-	else
-		retMatrix.sizeRows_ -= indexDelete.size();
-
 	if (retMatrix.sizeRows_ == 0)
 	{
 		BooleanMatrix retEmptyMatrix(1, 1);
@@ -88,48 +83,10 @@ BooleanMatrix		BooleanMatrix::operator*(const BooleanMatrix& matrix)
 
 BooleanMatrix&			BooleanMatrix::operator*=(const BooleanMatrix& matrix)
 {
-	uint_t				i(0);
-	uint_t				j(0);
-	uint_t				retSizeRows = calculateSizeRows_(sizeRows_, matrix.sizeRows_);
-	BooleanMatrix		retMatrix(retSizeRows, sizeCols_);
-	std::vector<uint_t>	indexDelete;
+	BooleanMatrix		retMatrix;
 
-	for (uint_t iRows = 0; iRows < sizeRows_; iRows++)
-	{
-		for (uint_t kRows = 0; kRows < matrix.sizeRows_; kRows++)
-			for (uint_t jCols = 0, lCols = 0, j = 0; jCols < sizeCols_; jCols++, lCols++, j++)
-			{
-				retMatrix(i, j) = product(matrix_[iRows][jCols], matrix.matrix_[kRows][lCols]);
-				if (retMatrix(i, j) == "-1")
-				{
-					indexDelete.push_back(i);
-				}
-				else if (((kRows == 0 && lCols == matrix.sizeCols_ - 1) || (kRows == 1 && lCols == matrix.sizeCols_ - 1)) && i < retSizeRows)
-				{
-					i++;
-				}
-			}
-	}
-	for (uint_t i = 0; i < ((indexDelete.size() > retSizeRows) ? retSizeRows : indexDelete.size()); i++)
-	{
-		if (i == 0)
-			retMatrix.matrix_.erase(retMatrix.matrix_.begin() + (indexDelete[i]));
-		else
-			retMatrix.matrix_.erase(retMatrix.matrix_.begin() + (indexDelete[i] - i));
-	}
-	if (indexDelete.size() > retSizeRows)
-		retMatrix.sizeRows_ -= 1;
-	else
-		retMatrix.sizeRows_ -= indexDelete.size();
+	retMatrix = *this * matrix;
 
-	if (retMatrix.sizeRows_ == 0)
-	{
-		BooleanMatrix retEmptyMatrix(1, 1);
-
-		retEmptyMatrix(0, 0) = "empty matrix";
-		*this = retEmptyMatrix;
-		return (*this);
-	}
 	*this = retMatrix;
 
 	return (*this);
@@ -148,6 +105,17 @@ BooleanMatrix		BooleanMatrix::operator+(const BooleanMatrix& matrix)
 	retMatrix.sizeCols_ = sizeCols_;
 
 	return (retMatrix);
+}
+
+BooleanMatrix		BooleanMatrix::operator+=(const BooleanMatrix& matrix)
+{
+	BooleanMatrix	retMatrix(sizeRows_ + matrix.sizeRows_, 1);
+
+	retMatrix = *this + matrix;
+
+	*this = retMatrix;
+
+	return (*this);
 }
 
 /**

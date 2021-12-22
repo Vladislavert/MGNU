@@ -21,6 +21,7 @@ class BooleanMatrix
 		BooleanMatrix			operator*(const BooleanMatrix& matrix);
 		BooleanMatrix&			operator*=(const BooleanMatrix& matrix);
 		BooleanMatrix			operator+(const BooleanMatrix& matrix);
+		BooleanMatrix			operator+=(const BooleanMatrix& matrix);
 		std::string&			operator()(const uint_t i, const uint_t j);
 		const std::string&		operator()(const uint_t i, const uint_t j) const;
 		BooleanMatrix			negation();
