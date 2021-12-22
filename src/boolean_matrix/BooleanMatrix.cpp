@@ -54,7 +54,6 @@ BooleanMatrix		BooleanMatrix::operator*(const BooleanMatrix& matrix)
 			for (uint_t jCols = 0, lCols = 0, j = 0; jCols < sizeCols_; jCols++, lCols++, j++)
 			{
 				retMatrix(i, j) = product(matrix_[iRows][jCols], matrix.matrix_[kRows][lCols]);
-				retMatrix.printMatrix();
 				if (retMatrix(i, j) == "-1")
 				{
 					indexDelete.push_back(i);
@@ -74,7 +73,7 @@ BooleanMatrix		BooleanMatrix::operator*(const BooleanMatrix& matrix)
 	{
 		BooleanMatrix retEmptyMatrix(1, 1);
 
-		retEmptyMatrix(0, 0) = "empty matrix";
+		retEmptyMatrix(0, 0) = kEmpty;
 		return (retEmptyMatrix);
 	}
 
@@ -116,6 +115,39 @@ BooleanMatrix		BooleanMatrix::operator+=(const BooleanMatrix& matrix)
 	*this = retMatrix;
 
 	return (*this);
+}
+
+bool		BooleanMatrix::operator==(const BooleanMatrix& matrix)
+{
+	//TOOD(vladilsavert): Добавить проверку на несоответствие размера
+	for (uint_t iRows = 0; iRows < sizeRows_; iRows++)
+	{
+		for (uint_t jCols = 0; jCols < sizeCols_; jCols++)
+		{
+			if (this->matrix_[iRows][jCols] != matrix(iRows, jCols))
+				return (false);
+		}
+	}
+
+	return (true);
+}
+
+bool		BooleanMatrix::operator!=(const BooleanMatrix& matrix)
+{
+	return (!(*this == matrix));
+}
+
+bool		BooleanMatrix::operator==(const std::string& empty)
+{
+	if (this->matrix_[0][0] == empty)
+		return (true);
+
+	return (false);
+}
+
+bool		BooleanMatrix::operator!=(const std::string& empty)
+{
+	return (!(*this == empty));
 }
 
 /**
@@ -162,6 +194,49 @@ BooleanMatrix		BooleanMatrix::negation()
 	}
 
 	return (retMatrix);
+}
+
+//TODO(vladislavert): Протестировать работу метода
+/**
+ * @brief Ортогонализация вектора
+ * 
+ */
+BooleanMatrix		BooleanMatrix::orthogonalize()
+{
+	BooleanMatrix		retMatrix;
+	uint_t				quantityDashOne = 0;
+	uint_t				quantityDashSecond = 0;
+	bool flag = true;
+
+	for (uint_t iRows = 0; iRows < sizeRows_; /*iRows++*/)
+	{
+		for (uint_t jRows = iRows + 1; jRows < sizeRows_; jRows++)
+		{
+			if (this->row(iRows) * this->row(jRows) != kEmpty)
+			{
+				// если "-" больше, то удаляется другой вектор
+				quantityDashOne = 0;
+				quantityDashSecond = 0;
+				for (uint_t iCols = 0; iCols < this->sizeCols_; iCols++)
+				{
+					if (this->matrix_[iRows][iCols] == "-")
+						quantityDashOne++;
+					if (this->matrix_[jRows][iCols] == "-")
+						quantityDashSecond++;
+				}
+				if (quantityDashOne < quantityDashSecond)
+					deleteRow(iRows);
+				else
+					deleteRow(jRows);
+				flag = false;
+			}
+		}
+		if (flag == true)
+			iRows++;
+		flag = true;
+	}
+
+	return (*this);
 }
 
 void		BooleanMatrix::printMatrix()
@@ -352,4 +427,11 @@ BooleanMatrix		BooleanMatrix::lineNegation(const BooleanMatrix& line)
 	}
 
 	return (retMatrix);
+}
+
+//TODO(vladislavert): Добавить возможность удаления вне класса
+void			BooleanMatrix::deleteRow(const uint_t index)
+{
+	this->matrix_.erase(this->matrix_.begin() + index);
+	this->sizeRows_ -= 1;
 }

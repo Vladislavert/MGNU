@@ -22,9 +22,14 @@ class BooleanMatrix
 		BooleanMatrix&			operator*=(const BooleanMatrix& matrix);
 		BooleanMatrix			operator+(const BooleanMatrix& matrix);
 		BooleanMatrix			operator+=(const BooleanMatrix& matrix);
+		bool					operator==(const BooleanMatrix& matrix);
+		bool					operator!=(const BooleanMatrix& matrix);
+		bool					operator==(const std::string& empty);
+		bool					operator!=(const std::string& empty);
 		std::string&			operator()(const uint_t i, const uint_t j);
 		const std::string&		operator()(const uint_t i, const uint_t j) const;
 		BooleanMatrix			negation();
+		BooleanMatrix			orthogonalize();
 		void					printMatrix();
 		uint_t					rows() const;
 		uint_t					cols() const;
@@ -35,6 +40,7 @@ class BooleanMatrix
 		std::vector<std::vector<std::string>>	matrix_;
 		uint_t									sizeRows_;
 		uint_t									sizeCols_;
+		const std::string						kEmpty = "empty matrix";
 
 		void			addRows();
 		void			addCols();
@@ -44,6 +50,7 @@ class BooleanMatrix
 		bool			isProductDash(const std::string& arg1, const std::string& arg2);
 		uint_t			calculateSizeRows_(uint_t sizeRows1, uint_t sizeRows2);
 		BooleanMatrix	lineNegation(const BooleanMatrix& line);
+		void			deleteRow(const uint_t index);
 };
 
 #endif
