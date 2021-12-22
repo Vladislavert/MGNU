@@ -39,7 +39,12 @@ BooleanMatrix& BooleanMatrix::operator=(const BooleanMatrix& matrix)
 	return (*this);
 }
 
-//TODO(Vladislavert): Пофиксить умножение
+/**
+ * @brief Умножение
+ * 
+ * @param matrix 
+ * @return BooleanMatrix 
+ */
 BooleanMatrix		BooleanMatrix::operator*(const BooleanMatrix& matrix)
 {
 	uint_t				i(0);
@@ -176,7 +181,7 @@ const		std::string& BooleanMatrix::operator()(const uint_t i, const uint_t j) co
 }
 
 /**
- * @brief Нахождение отрицания
+ * @brief Нахождение отрицательной матрицы
  * 
  * @return отрицательная матрица 
  */
@@ -239,6 +244,10 @@ BooleanMatrix		BooleanMatrix::orthogonalize()
 	return (*this);
 }
 
+/**
+ * @brief Вывод матрицы
+ * 
+ */
 void		BooleanMatrix::printMatrix()
 {
 	for (uint_t i = 0; i < sizeRows_; i++)
@@ -251,11 +260,21 @@ void		BooleanMatrix::printMatrix()
 	}
 }
 
+/**
+ * @brief Размер строки
+ * 
+ * @return uint_t 
+ */
 uint_t		BooleanMatrix::rows() const
 {
 	return (sizeRows_);
 }
 
+/**
+ * @brief Размер столбцов
+ * 
+ * @return uint_t 
+ */
 uint_t		BooleanMatrix::cols() const
 {
 	return (sizeCols_);
@@ -264,8 +283,8 @@ uint_t		BooleanMatrix::cols() const
 /**
  * @brief возвращает строку матрицы по указанному индексу
  * 
- * @param index 
- * @return BooleanMatrix 
+ * @param index индекс строки
+ * @return строка 
  */
 BooleanMatrix		BooleanMatrix::row(uint_t index)
 {
@@ -279,10 +298,23 @@ BooleanMatrix		BooleanMatrix::row(uint_t index)
 	return (retLine);
 }
 
-// uint_t BooleanMatrix::col() const
-// {
-// 	return (sizeCols_);
-// }
+/**
+ * @brief возвращает столбец матрицы по указанному индексу
+ * 
+ * @param index индекс столбца
+ * @return столбец
+ */
+BooleanMatrix		BooleanMatrix::col(uint_t index)
+{
+	BooleanMatrix	retCol(sizeRows_, 1);
+
+	for (uint_t i = 0; i < sizeRows_; i++)
+	{
+		retCol(i, 0) = matrix_[i][index];
+	}
+
+	return (retCol);
+}
 
 /**
  * @brief добавление строк
@@ -305,6 +337,13 @@ void		BooleanMatrix::addCols()
 	}	
 }
 
+/**
+ * @brief Умножение строк
+ * 
+ * @param arg1
+ * @param arg2 
+ * @return результат умножения строк
+ */
 std::string		BooleanMatrix::product(const std::string& arg1, const std::string& arg2)
 {
 	std::string	retSymbol;
@@ -405,8 +444,7 @@ BooleanMatrix		BooleanMatrix::lineNegation(const BooleanMatrix& line)
 	std::vector<uint_t>	indexDash;
 	std::vector<uint_t> indexOneAndZero;
 
-	//TODO(vladislavert): написать проверку, на аргумент функции(должна быть строка)
-
+	//TODO(vladislavert): написать проверку на аргумент функции(должна быть строка)
 	for (uint_t i = 0; i < line.cols(); i++)
 		if (line(0, i) == "-")
 			indexDash.push_back(i);
