@@ -90,7 +90,6 @@ BooleanMatrix&			BooleanMatrix::operator*=(const BooleanMatrix& matrix)
 	BooleanMatrix		retMatrix;
 
 	retMatrix = *this * matrix;
-
 	*this = retMatrix;
 
 	return (*this);
@@ -208,6 +207,49 @@ BooleanMatrix		BooleanMatrix::negation()
  * 
  */
 BooleanMatrix		BooleanMatrix::orthogonalize()
+{
+	BooleanMatrix		retMatrix;
+	uint_t				quantityDashOne = 0;
+	uint_t				quantityDashSecond = 0;
+	bool flag = true;
+
+	for (uint_t iRows = 0; iRows < sizeRows_; /*iRows++*/)
+	{
+		for (uint_t jRows = iRows + 1; jRows < sizeRows_; jRows++)
+		{
+			if (this->row(iRows) * this->row(jRows) != kEmpty)
+			{
+				// если "-" больше, то удаляется другой вектор
+				quantityDashOne = 0;
+				quantityDashSecond = 0;
+				for (uint_t iCols = 0; iCols < this->sizeCols_; iCols++)
+				{
+					if (this->matrix_[iRows][iCols] == "-")
+						quantityDashOne++;
+					if (this->matrix_[jRows][iCols] == "-")
+						quantityDashSecond++;
+				}
+				if (quantityDashOne < quantityDashSecond)
+					deleteRow(iRows);
+				else
+					deleteRow(jRows);
+				flag = false;
+			}
+		}
+		if (flag == true)
+			iRows++;
+		flag = true;
+	}
+
+	return (*this);
+}
+
+//TODO(vladislavert): Протестировать работу метода
+/**
+ * @brief Ортогонализация вектора
+ * 
+ */
+BooleanMatrix		BooleanMatrix::fastOrthogonalize()
 {
 	BooleanMatrix		retMatrix;
 	uint_t				quantityDashOne = 0;

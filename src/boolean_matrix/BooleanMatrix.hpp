@@ -30,6 +30,7 @@ class BooleanMatrix
 		const std::string&		operator()(const uint_t i, const uint_t j) const;
 		BooleanMatrix			negation();
 		BooleanMatrix			orthogonalize();
+		BooleanMatrix			fastOrthogonalize();
 		void					printMatrix();
 		uint_t					rows() const;
 		uint_t					cols() const;
