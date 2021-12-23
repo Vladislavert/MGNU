@@ -6,9 +6,6 @@ set(COMMON_FLAGS "-g -Wall -Wextra -Werror")
 
 set(CMAKE_CXX_FLAGS "${COMMON_FLAGS}")
 
-
-# find_package (Eigen3  REQUIRED)
-
 include_directories(
 		inc
 		src/boolean_matrix
@@ -22,6 +19,6 @@ set(CPP_FILES
 
 add_library(booleanMatrix STATIC ${CPP_FILES})
 
-add_executable(main main.cpp)
+add_executable(main main_test.cpp)
 
 target_link_libraries(main booleanMatrix ${CMAKE_THREAD_LIBS_INIT})

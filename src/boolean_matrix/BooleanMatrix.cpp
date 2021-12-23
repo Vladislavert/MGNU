@@ -107,7 +107,7 @@ BooleanMatrix		BooleanMatrix::operator+(const BooleanMatrix& matrix)
 
 	retMatrix.sizeRows_ = sizeRows_ + matrix.sizeRows_;
 	retMatrix.sizeCols_ = sizeCols_;
-	retMatrix.orthogonalize();
+	// retMatrix.orthogonalize();
 
 	return (retMatrix);
 }
@@ -203,6 +203,9 @@ BooleanMatrix		BooleanMatrix::negation()
 }
 
 //TODO(vladislavert): Протестировать работу метода
+//TODO(vladislavert): Не всегда из отсутствия ортогональности
+// следует вложенность векторов, пример: (1 -) * (- 1) = (1 1) - не ортогональны,
+// но один не вложен в другой, (1 -; 0 -) - результат ортогонализации
 /**
  * @brief Ортогонализация вектора
  * 
@@ -231,9 +234,11 @@ BooleanMatrix		BooleanMatrix::orthogonalize()
 						quantityDashSecond++;
 				}
 				if (quantityDashOne < quantityDashSecond)
-					deleteRow(iRows);
+					searchForOrthogonalVectors(iRows, jRows);
+					// deleteRow(iRows);
 				else
-					deleteRow(jRows);
+					searchForOrthogonalVectors(jRows, iRows);
+					// deleteRow(jRows);
 				flag = false;
 			}
 		}
@@ -466,6 +471,12 @@ BooleanMatrix		BooleanMatrix::lineNegation(const BooleanMatrix& line)
 	}
 
 	return (retMatrix);
+}
+
+void			BooleanMatrix::searchForOrthogonalVectors(const uint_t indexMaxDash,
+														  const uint_t indexMinDash)
+{
+
 }
 
 //TODO(vladislavert): Добавить возможность удаления вне класса
