@@ -81,6 +81,7 @@ BooleanMatrix		BooleanMatrix::operator*(const BooleanMatrix& matrix)
 		retEmptyMatrix(0, 0) = kEmpty;
 		return (retEmptyMatrix);
 	}
+	retMatrix.orthogonalize();
 
 	return (retMatrix);
 }
@@ -107,6 +108,7 @@ BooleanMatrix		BooleanMatrix::operator+(const BooleanMatrix& matrix)
 
 	retMatrix.sizeRows_ = sizeRows_ + matrix.sizeRows_;
 	retMatrix.sizeCols_ = sizeCols_;
+	retMatrix.orthogonalize();
 
 	return (retMatrix);
 }
