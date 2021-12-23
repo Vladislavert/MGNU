@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(booleanMatrix)
 set(CMAKE_CXX_STANDARD 17 )
 
-set(COMMON_FLAGS "-g")
+set(COMMON_FLAGS "-g -Wall -Wextra -Werror")
 
 set(CMAKE_CXX_FLAGS "${COMMON_FLAGS}")
 

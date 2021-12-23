@@ -13,9 +13,9 @@ BooleanMatrix::BooleanMatrix(const uint_t sizeRows, const uint_t sizeCols)
 }
 
 BooleanMatrix::BooleanMatrix(const BooleanMatrix& matrix)
-	: sizeRows_(matrix.sizeRows_),
-	  sizeCols_(matrix.sizeCols_),
-	  matrix_(matrix.matrix_)
+	: matrix_(matrix.matrix_),
+	  sizeRows_(matrix.sizeRows_),
+	  sizeCols_(matrix.sizeCols_)
 { }
 
 class BooleanMatrix::OutOfBoundsException : public std::exception
@@ -48,7 +48,6 @@ BooleanMatrix& BooleanMatrix::operator=(const BooleanMatrix& matrix)
 BooleanMatrix		BooleanMatrix::operator*(const BooleanMatrix& matrix)
 {
 	uint_t				i(0);
-	uint_t				j(0);
 	uint_t				retSizeRows = calculateSizeRows_(sizeRows_, matrix.sizeRows_);
 	BooleanMatrix		retMatrix(retSizeRows, sizeCols_);
 	std::vector<uint_t>	indexDelete;

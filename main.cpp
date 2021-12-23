@@ -76,7 +76,7 @@ int main()
 
 	// res = f1 * f2.negation() * f3;
 	res = f1;
-	res += f2;
+	res *= f2;
 	// res *= f3;
 	std::cout << "product f1 * f2 * f3 (" <<  res.rows() << "x" << res.cols() << "):" << std::endl;
 	// res = res * f3;
