@@ -14,13 +14,13 @@ int main()
 	BooleanMatrix f3(1, 3);
 
 	f1(0, 0) = "1";
-	f1(0, 1) = "0";
+	f1(0, 1) = "-";
 	f1(0, 2) = "-";
 	f1(0, 3) = "-";
 	f1(0, 4) = "-";
 	f1(0, 5) = "-";
 
-	f1(1, 0) = "0";
+	f1(1, 0) = "-";
 	f1(1, 1) = "1";
 	f1(1, 2) = "-";
 	f1(1, 3) = "-";
@@ -65,18 +65,18 @@ int main()
 	// f2(1, 2) = "-";
 
 
-	f3(0, 0) = "1";
+	f3(0, 0) = "0";
 	f3(0, 1) = "-";
 	f3(0, 2) = "-";
-
+	
 
 	// res = f1 * f2.negation() * f3;
 	res = f1.row(0);
-	res *= f1.row(1);
-	// for (uint_t i = 0; i < 1; i++)
-	// {
-	// 	res *= f1.row(i);
-	// }
+	// res += f1.row(1);
+	for (uint_t i = 1; i < 6; i++)
+	{
+		res += f1.row(i);
+	}
 	
 	
 	// res *= f2;
@@ -87,7 +87,7 @@ int main()
 	res.printMatrix();
 	std::cout << std::endl;
 	res.orthogonalize().printMatrix();
-	res.negation().printMatrix();
+	// res.negation().printMatrix();
 	std::cout << std::endl;
 
 	// res = a + b;

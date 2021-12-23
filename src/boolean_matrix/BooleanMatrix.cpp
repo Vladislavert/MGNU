@@ -213,8 +213,9 @@ BooleanMatrix		BooleanMatrix::negation()
 BooleanMatrix		BooleanMatrix::orthogonalize()
 {
 	BooleanMatrix		retMatrix;
-	uint_t				quantityDashOne = 0;
-	uint_t				quantityDashSecond = 0;
+	uint_t				quantityDashOne(0);
+	uint_t				quantityDashSecond (0);
+	// uint_t				multiplicity(0);
 	bool flag = true;
 
 	for (uint_t iRows = 0; iRows < sizeRows_; /*iRows++*/)
@@ -234,10 +235,10 @@ BooleanMatrix		BooleanMatrix::orthogonalize()
 						quantityDashSecond++;
 				}
 				if (quantityDashOne < quantityDashSecond)
-					searchForOrthogonalVectors(iRows, jRows);
+					searchForOrthogonalVectors(jRows, iRows);
 					// deleteRow(iRows);
 				else
-					searchForOrthogonalVectors(jRows, iRows);
+					searchForOrthogonalVectors(iRows, jRows);
 					// deleteRow(jRows);
 				flag = false;
 			}
@@ -473,10 +474,45 @@ BooleanMatrix		BooleanMatrix::lineNegation(const BooleanMatrix& line)
 	return (retMatrix);
 }
 
+/**
+ * @brief Функция, для поиска ортогональных векторов
+ * 
+ * @param indexMaxDash индекс с максимальным кол-вом "-"
+ * @param indexMinDash индекс с минимальным кол-вом "-"
+ */
 void			BooleanMatrix::searchForOrthogonalVectors(const uint_t indexMaxDash,
 														  const uint_t indexMinDash)
 {
+	vectUint_t	maxNotDashIndex;
+	vectUint_t	minDashIndex;
+	bool		isDelete(true);
+	maxNotDashIndex = searchNotDashIndexInCols(indexMaxDash);
+	minDashIndex = searchNotDashIndexInCols(indexMinDash, false);
 
+	for (uint_t i = 0; i < maxNotDashIndex.size(); i++)
+	{
+		for (uint_t j = 0; j < minDashIndex.size(); j++)
+		{
+			if (maxNotDashIndex[i] == minDashIndex[j])
+			{
+				if (this->matrix_[indexMaxDash][maxNotDashIndex[i]] == "0")
+					this->matrix_[indexMinDash][maxNotDashIndex[i]] = "1";
+				else
+					this->matrix_[indexMinDash][maxNotDashIndex[i]] = "0";
+				isDelete = false;
+			}
+			else if (isDelete != false)
+				isDelete = true;
+		}
+	}
+	if (isDelete == true)
+	{
+		deleteRow(indexMinDash);
+	}
+	else
+	{
+
+	}
 }
 
 //TODO(vladislavert): Добавить возможность удаления вне класса
@@ -486,12 +522,19 @@ void			BooleanMatrix::deleteRow(const uint_t index)
 	this->sizeRows_ -= 1;
 }
 
-vectUint_t		BooleanMatrix::searchNotDashIndexInCols(const uint_t indexRow)
+/**
+ * @brief Поиск "-" или 
+ * 
+ * @param indexRow индекс строки, в которой будет происходит поиск согласно flag
+ * @param flag false - ищет индексы, которые != "-", true - ищет все индексы, которые == "-"
+ * @return вектор соответствующих индексов в строке
+ */
+vectUint_t		BooleanMatrix::searchNotDashIndexInCols(const uint_t indexRow, bool flag)
 {
 	vectUint_t	retIndexNotDash;
 
 	for (uint_t iCols = 0; iCols < sizeCols_; iCols++)
-		if (this->matrix_[indexRow][iCols] != "-")
+		if (!(flag ^ (this->matrix_[indexRow][iCols] != "-")))
 			retIndexNotDash.push_back(iCols);
 
 	return (retIndexNotDash);
