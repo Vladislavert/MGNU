@@ -52,6 +52,8 @@ class BooleanMatrix
 		uint_t			calculateSizeRows_(uint_t sizeRows1, uint_t sizeRows2);
 		BooleanMatrix	lineNegation(const BooleanMatrix& line);
 		void			deleteRow(const uint_t index);
+		uint_t			searchMaxDashIndexInRows();
+		vectUint_t		searchNotDashIndexInCols(const uint_t indexRow);
 };
 
 #endif

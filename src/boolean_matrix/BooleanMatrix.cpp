@@ -50,7 +50,7 @@ BooleanMatrix		BooleanMatrix::operator*(const BooleanMatrix& matrix)
 	uint_t				i(0);
 	uint_t				retSizeRows = calculateSizeRows_(sizeRows_, matrix.sizeRows_);
 	BooleanMatrix		retMatrix(retSizeRows, sizeCols_);
-	std::vector<uint_t>	indexDelete;
+	vectUint_t			indexDelete;
 
 	for (uint_t iRows = 0; iRows < sizeRows_; iRows++) // перебор по строкам 1-ой матрицы
 	{
@@ -252,37 +252,21 @@ BooleanMatrix		BooleanMatrix::orthogonalize()
 BooleanMatrix		BooleanMatrix::fastOrthogonalize()
 {
 	BooleanMatrix		retMatrix;
-	uint_t				quantityDashOne = 0;
-	uint_t				quantityDashSecond = 0;
-	bool flag = true;
+	// BooleanMatrix		tempMatrix;
+	uint_t				maxDashIndexRow(0);
+	vectUint_t			indexNotDash;
 
-	for (uint_t iRows = 0; iRows < sizeRows_; /*iRows++*/)
+	maxDashIndexRow = searchMaxDashIndexInRows();
+	indexNotDash = searchNotDashIndexInCols(maxDashIndexRow);
+	BooleanMatrix tempMatrix(sizeRows_, indexNotDash.size());
+	for (uint_t iCols = 0; iCols < indexNotDash.size(); iCols++)
 	{
-		for (uint_t jRows = iRows + 1; jRows < sizeRows_; jRows++)
-		{
-			if (this->row(iRows) * this->row(jRows) != kEmpty)
-			{
-				// если "-" больше, то удаляется другой вектор
-				quantityDashOne = 0;
-				quantityDashSecond = 0;
-				for (uint_t iCols = 0; iCols < this->sizeCols_; iCols++)
-				{
-					if (this->matrix_[iRows][iCols] == "-")
-						quantityDashOne++;
-					if (this->matrix_[jRows][iCols] == "-")
-						quantityDashSecond++;
-				}
-				if (quantityDashOne < quantityDashSecond)
-					deleteRow(iRows);
-				else
-					deleteRow(jRows);
-				flag = false;
-			}
-		}
-		if (flag == true)
-			iRows++;
-		flag = true;
+		//TODO(vladislavert): реализовать возвращение по ссылку col and row
+		tempMatrix.col(iCols) = this->col(indexNotDash[iCols]);
 	}
+	tempMatrix.orthogonalize();
+
+	*this = tempMatrix;
 
 	return (*this);
 }
@@ -484,8 +468,8 @@ BooleanMatrix		BooleanMatrix::lineNegation(const BooleanMatrix& line)
 {
 	BooleanMatrix		retMatrix(1, sizeCols_);
 	uint_t				sizeRows = 0;
-	std::vector<uint_t>	indexDash;
-	std::vector<uint_t> indexOneAndZero;
+	vectUint_t			indexDash;
+	vectUint_t			indexOneAndZero;
 
 	//TODO(vladislavert): написать проверку на аргумент функции(должна быть строка)
 	for (uint_t i = 0; i < line.cols(); i++)
@@ -515,4 +499,46 @@ void			BooleanMatrix::deleteRow(const uint_t index)
 {
 	this->matrix_.erase(this->matrix_.begin() + index);
 	this->sizeRows_ -= 1;
+}
+
+/**
+ * @brief Поиск индекса с максимальным кол-вом "-"
+ * 
+ * @return uint_t 
+ */
+uint_t		BooleanMatrix::searchMaxDashIndexInRows()
+{
+	uint_t				retIndexMaxDash(0);
+	uint_t				quantityDashOne(0);
+	uint_t				quantityDashSecond(0);
+
+	quantityDashOne = 0;
+	quantityDashSecond = 0;
+	for (uint_t iRows = 0; iRows < sizeRows_; iRows++)
+		for (uint_t jRows = iRows + 1; jRows < sizeRows_; jRows++)
+		{
+			for (uint_t iCols = 0; iCols < this->sizeCols_; iCols++)
+			{
+				if (this->matrix_[iRows][iCols] == "-")
+					quantityDashOne++;
+				if (this->matrix_[jRows][iCols] == "-")
+					quantityDashSecond++;
+			}
+			if (quantityDashOne < quantityDashSecond)
+				retIndexMaxDash = iRows;
+			else
+				retIndexMaxDash = jRows;
+		}
+	return (retIndexMaxDash);
+}
+
+vectUint_t		BooleanMatrix::searchNotDashIndexInCols(const uint_t indexRow)
+{
+	vectUint_t	retIndexNotDash;
+
+	for (uint_t iCols = 0; iCols < sizeCols_; iCols++)
+		if (this->matrix_[indexRow][iCols] != "-")
+			retIndexNotDash.push_back(iCols);
+
+	return (retIndexNotDash);
 }
