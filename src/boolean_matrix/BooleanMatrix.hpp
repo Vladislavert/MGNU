@@ -52,6 +52,8 @@ class BooleanMatrix
 		BooleanMatrix	lineNegation(const BooleanMatrix& line);
 		void			searchForOrthogonalVectors(const uint_t indexMaxDash, const uint_t indexMinDash);
 		void			deleteRow(const uint_t index);
+		vectUint_t		searchNotDashIndexInCols(const uint_t indexRow)
+
 };
 
 #endif

@@ -485,3 +485,14 @@ void			BooleanMatrix::deleteRow(const uint_t index)
 	this->matrix_.erase(this->matrix_.begin() + index);
 	this->sizeRows_ -= 1;
 }
+
+vectUint_t		BooleanMatrix::searchNotDashIndexInCols(const uint_t indexRow)
+{
+	vectUint_t	retIndexNotDash;
+
+	for (uint_t iCols = 0; iCols < sizeCols_; iCols++)
+		if (this->matrix_[indexRow][iCols] != "-")
+			retIndexNotDash.push_back(iCols);
+
+	return (retIndexNotDash);
+}
