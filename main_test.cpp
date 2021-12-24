@@ -3,13 +3,15 @@
 #include "typesData.hpp"
 #include "BooleanMatrix.hpp"
 
+#include <ctime>
+
 int main()
 {
 	BooleanMatrix res;
 	// BooleanMatrix a(1, 3);
 	// BooleanMatrix b(1, 3);
 
-	BooleanMatrix f1(6, 6);
+	BooleanMatrix f1(6, 10);
 	BooleanMatrix f2(1, 3);
 	BooleanMatrix f3(1, 3);
 
@@ -19,6 +21,10 @@ int main()
 	f1(0, 3) = "-";
 	f1(0, 4) = "-";
 	f1(0, 5) = "-";
+	f1(0, 6) = "1";
+	f1(0, 7) = "0";
+	f1(0, 8) = "-";
+	f1(0, 9) = "1";
 
 	f1(1, 0) = "-";
 	f1(1, 1) = "1";
@@ -26,6 +32,10 @@ int main()
 	f1(1, 3) = "-";
 	f1(1, 4) = "-";
 	f1(1, 5) = "-";
+	f1(1, 6) = "1";
+	f1(1, 7) = "1";
+	f1(1, 8) = "1";
+	f1(1, 9) = "1";
 
 	f1(2, 0) = "-";
 	f1(2, 1) = "-";
@@ -33,6 +43,10 @@ int main()
 	f1(2, 3) = "-";
 	f1(2, 4) = "-";
 	f1(2, 5) = "-";
+	f1(2, 6) = "0";
+	f1(2, 7) = "0";
+	f1(2, 8) = "0";
+	f1(2, 9) = "0";
 
 	f1(3, 0) = "-";
 	f1(3, 1) = "-";
@@ -40,6 +54,10 @@ int main()
 	f1(3, 3) = "1";
 	f1(3, 4) = "-";
 	f1(3, 5) = "-";
+	f1(3, 6) = "1";
+	f1(3, 7) = "0";
+	f1(3, 8) = "-";
+	f1(3, 9) = "1";
 
 
 	f1(4, 0) = "-";
@@ -48,6 +66,10 @@ int main()
 	f1(4, 3) = "-";
 	f1(4, 4) = "1";
 	f1(4, 5) = "-";
+	f1(4, 6) = "1";
+	f1(4, 7) = "0";
+	f1(4, 8) = "-";
+	f1(4, 9) = "1";
 
 	f1(5, 0) = "-";
 	f1(5, 1) = "-";
@@ -55,6 +77,10 @@ int main()
 	f1(5, 3) = "-";
 	f1(5, 4) = "-";
 	f1(5, 5) = "1";
+	f1(5, 6) = "1";
+	f1(5, 7) = "0";
+	f1(5, 8) = "-";
+	f1(5, 9) = "0";
 
 	// f2(0, 0) = "-";
 	// f2(0, 1) = "-";
@@ -86,8 +112,13 @@ int main()
 	std::cout << "res" << std::endl;
 	res.printMatrix();
 	std::cout << std::endl;
+	unsigned int start_time =  clock(); // начальное время
+    
 	res.orthogonalize().printMatrix();
-	// res.negation().printMatrix();
+	unsigned int end_time = clock(); // конечное время
+    unsigned int search_time = end_time - start_time; // искомое время
+	std::cout << std::endl;
+	std::cout << "time = " << search_time/1000.0 << std::endl;	// res.negation().printMatrix();
 	std::cout << std::endl;
 
 	// res = a + b;

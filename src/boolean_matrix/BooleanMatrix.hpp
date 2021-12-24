@@ -48,11 +48,11 @@ class BooleanMatrix
 		bool			isProductOne(const std::string& arg1, const std::string& arg2);
 		bool			isProductZero(const std::string& arg1, const std::string& arg2);
 		bool			isProductDash(const std::string& arg1, const std::string& arg2);
-		uint_t			calculateSizeRows_(uint_t sizeRows1, uint_t sizeRows2);
+		uint_t			calculateSizeRows(uint_t sizeRows1, uint_t sizeRows2);
 		BooleanMatrix	lineNegation(const BooleanMatrix& line);
 		void			searchForOrthogonalVectors(const uint_t indexMaxDash, const uint_t indexMinDash);
 		void			deleteRow(const uint_t index);
-		vectUint_t		searchNotDashIndexInCols(const uint_t indexRow, bool flag = true);
+		vectUint_t		searchNotDashIndexInCols(const uint_t indexRow, bool isNotDash = true);
 
 };
 

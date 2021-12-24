@@ -48,7 +48,7 @@ BooleanMatrix& BooleanMatrix::operator=(const BooleanMatrix& matrix)
 BooleanMatrix		BooleanMatrix::operator*(const BooleanMatrix& matrix)
 {
 	uint_t				i(0);
-	uint_t				retSizeRows = calculateSizeRows_(sizeRows_, matrix.sizeRows_);
+	uint_t				retSizeRows = calculateSizeRows(sizeRows_, matrix.sizeRows_);
 	BooleanMatrix		retMatrix(retSizeRows, sizeCols_);
 	std::vector<uint_t>	indexDelete;
 
@@ -66,7 +66,6 @@ BooleanMatrix		BooleanMatrix::operator*(const BooleanMatrix& matrix)
 
 					break ;
 				}
-				// else if (((kRows == 0 && lCols == matrix.sizeCols_ - 1) || (kRows == 1 && lCols == matrix.sizeCols_ - 1)) && i < retSizeRows)
 				else if ((lCols == matrix.sizeCols_ - 1) && i < retSizeRows)
 				{
 					i++;
@@ -78,6 +77,7 @@ BooleanMatrix		BooleanMatrix::operator*(const BooleanMatrix& matrix)
 		BooleanMatrix retEmptyMatrix(1, 1);
 
 		retEmptyMatrix(0, 0) = kEmpty;
+
 		return (retEmptyMatrix);
 	}
 	retMatrix.orthogonalize();
@@ -90,7 +90,6 @@ BooleanMatrix&			BooleanMatrix::operator*=(const BooleanMatrix& matrix)
 	BooleanMatrix		retMatrix;
 
 	retMatrix = *this * matrix;
-
 	*this = retMatrix;
 
 	return (*this);
@@ -104,10 +103,9 @@ BooleanMatrix		BooleanMatrix::operator+(const BooleanMatrix& matrix)
 		retMatrix.matrix_[iRows] = matrix_[iRows];
 	for (uint_t iRows = sizeRows_, iRowsNext = 0; iRowsNext < matrix.sizeRows_; iRows++, iRowsNext++)
 		retMatrix.matrix_[iRows] = matrix.matrix_[iRowsNext];
-
 	retMatrix.sizeRows_ = sizeRows_ + matrix.sizeRows_;
 	retMatrix.sizeCols_ = sizeCols_;
-	// retMatrix.orthogonalize();
+	retMatrix.orthogonalize();
 
 	return (retMatrix);
 }
@@ -123,6 +121,13 @@ BooleanMatrix		BooleanMatrix::operator+=(const BooleanMatrix& matrix)
 	return (*this);
 }
 
+/**
+ * @brief Сравнение матриц
+ * 
+ * @param matrix булева матрица
+ * @return true - матрицы равны
+ * @return false 
+ */
 bool		BooleanMatrix::operator==(const BooleanMatrix& matrix)
 {
 	//TOOD(vladilsavert): Добавить проверку на несоответствие размера
@@ -143,6 +148,13 @@ bool		BooleanMatrix::operator!=(const BooleanMatrix& matrix)
 	return (!(*this == matrix));
 }
 
+/**
+ * @brief Сравнение с пустой строкой
+ * 
+ * @param empty пустая строка "empty matrix"
+ * @return true - равна пустой строке
+ * @return false 
+ */
 bool		BooleanMatrix::operator==(const std::string& empty)
 {
 	if (this->matrix_[0][0] == empty)
@@ -192,7 +204,6 @@ BooleanMatrix		BooleanMatrix::negation()
 	BooleanMatrix	tempMatrix(sizeRows_, sizeCols_);
 
 	tempMatrix.matrix_ = matrix_;
-
 	retMatrix = lineNegation(tempMatrix.row(0));
 	for (uint_t i = 1; i < sizeRows_; i++)
 	{
@@ -205,7 +216,7 @@ BooleanMatrix		BooleanMatrix::negation()
 //TODO(vladislavert): Протестировать работу метода
 //TODO(vladislavert): Не всегда из отсутствия ортогональности
 // следует вложенность векторов, пример: (1 -) * (- 1) = (1 1) - не ортогональны,
-// но один не вложен в другой, (1 -; 0 -) - результат ортогонализации
+// но один не вложен в другой, (1 -; 0 -) - результат ортогонализации(исправлено)
 /**
  * @brief Ортогонализация вектора
  * 
@@ -216,7 +227,7 @@ BooleanMatrix		BooleanMatrix::orthogonalize()
 	uint_t				quantityDashOne(0);
 	uint_t				quantityDashSecond (0);
 	// uint_t				multiplicity(0);
-	bool flag = true;
+	bool flag(true);
 
 	for (uint_t iRows = 0; iRows < sizeRows_; /*iRows++*/)
 	{
@@ -224,7 +235,6 @@ BooleanMatrix		BooleanMatrix::orthogonalize()
 		{
 			if (this->row(iRows) * this->row(jRows) != kEmpty)
 			{
-				// если "-" больше, то удаляется другой вектор
 				quantityDashOne = 0;
 				quantityDashSecond = 0;
 				for (uint_t iCols = 0; iCols < this->sizeCols_; iCols++)
@@ -236,10 +246,8 @@ BooleanMatrix		BooleanMatrix::orthogonalize()
 				}
 				if (quantityDashOne < quantityDashSecond)
 					searchForOrthogonalVectors(jRows, iRows);
-					// deleteRow(iRows);
 				else
 					searchForOrthogonalVectors(iRows, jRows);
-					// deleteRow(jRows);
 				flag = false;
 			}
 		}
@@ -268,9 +276,9 @@ void		BooleanMatrix::printMatrix()
 }
 
 /**
- * @brief Размер строки
+ * @brief Возвращает размер строк
  * 
- * @return uint_t 
+ * @return размер строк
  */
 uint_t		BooleanMatrix::rows() const
 {
@@ -278,9 +286,9 @@ uint_t		BooleanMatrix::rows() const
 }
 
 /**
- * @brief Размер столбцов
+ * @brief Возвращает размер столбцов
  * 
- * @return uint_t 
+ * @return размер столбцов
  */
 uint_t		BooleanMatrix::cols() const
 {
@@ -398,6 +406,7 @@ bool		BooleanMatrix::isProductOne(const std::string& arg1, const std::string& ar
 	{
 		return (true);
 	}
+
 	return (false);
 }
 
@@ -416,17 +425,18 @@ bool		BooleanMatrix::isProductZero(const std::string& arg1, const std::string& a
 	{
 		return (true);
 	}
+
 	return (false);
 }
 
 /**
- * @brief Рассчёт кол-ва строк, которое получаем при умножении
+ * @brief Рассчёт кол-ва строк, которые получаем при умножении
  * 
  * @param sizeRows1 размер строки первого множителя
  * @param sizeRows2 размер строки второго множителя
- * @return uint_t 
+ * @return размер строк в матрице
  */
-uint_t		BooleanMatrix::calculateSizeRows_(uint_t sizeRows1, uint_t sizeRows2)
+uint_t		BooleanMatrix::calculateSizeRows(uint_t sizeRows1, uint_t sizeRows2)
 {
 	uint_t	retSizeRows(0);
 
@@ -439,7 +449,7 @@ uint_t		BooleanMatrix::calculateSizeRows_(uint_t sizeRows1, uint_t sizeRows2)
 }
 
 /**
- * @brief нахождение отрицание для троичной строки
+ * @brief нахождение отрицания для троичной строки
  * 
  * @param line троичная строка
  * @return матрицы отрицания для троичной строки
@@ -475,7 +485,7 @@ BooleanMatrix		BooleanMatrix::lineNegation(const BooleanMatrix& line)
 }
 
 /**
- * @brief Функция, для поиска ортогональных векторов
+ * @brief Функция для поиска ортогональных векторов
  * 
  * @param indexMaxDash индекс с максимальным кол-вом "-"
  * @param indexMinDash индекс с минимальным кол-вом "-"
@@ -486,9 +496,9 @@ void			BooleanMatrix::searchForOrthogonalVectors(const uint_t indexMaxDash,
 	vectUint_t	maxNotDashIndex;
 	vectUint_t	minDashIndex;
 	bool		isDelete(true);
+
 	maxNotDashIndex = searchNotDashIndexInCols(indexMaxDash);
 	minDashIndex = searchNotDashIndexInCols(indexMinDash, false);
-
 	for (uint_t i = 0; i < maxNotDashIndex.size(); i++)
 	{
 		for (uint_t j = 0; j < minDashIndex.size(); j++)
@@ -506,16 +516,15 @@ void			BooleanMatrix::searchForOrthogonalVectors(const uint_t indexMaxDash,
 		}
 	}
 	if (isDelete == true)
-	{
 		deleteRow(indexMinDash);
-	}
-	else
-	{
-
-	}
 }
 
 //TODO(vladislavert): Добавить возможность удаления вне класса
+/**
+ * @brief удаление строки по указанному индексу
+ * 
+ * @param index индекс строки
+ */
 void			BooleanMatrix::deleteRow(const uint_t index)
 {
 	this->matrix_.erase(this->matrix_.begin() + index);
@@ -523,18 +532,18 @@ void			BooleanMatrix::deleteRow(const uint_t index)
 }
 
 /**
- * @brief Поиск "-" или 
+ * @brief Поиск "-" или отсутствие "-", согласно переменной isNotDash 
  * 
- * @param indexRow индекс строки, в которой будет происходит поиск согласно flag
- * @param flag false - ищет индексы, которые != "-", true - ищет все индексы, которые == "-"
+ * @param indexRow индекс строки, в которой будет происходит поиск согласно переменной isNotDash
+ * @param isNotDash false - ищет индексы, которые == "-", true - ищет все индексы, которые != "-"
  * @return вектор соответствующих индексов в строке
  */
-vectUint_t		BooleanMatrix::searchNotDashIndexInCols(const uint_t indexRow, bool flag)
+vectUint_t		BooleanMatrix::searchNotDashIndexInCols(const uint_t indexRow, bool isNotDash)
 {
 	vectUint_t	retIndexNotDash;
 
 	for (uint_t iCols = 0; iCols < sizeCols_; iCols++)
-		if (!(flag ^ (this->matrix_[indexRow][iCols] != "-")))
+		if (!(isNotDash ^ (this->matrix_[indexRow][iCols] != "-")))
 			retIndexNotDash.push_back(iCols);
 
 	return (retIndexNotDash);
