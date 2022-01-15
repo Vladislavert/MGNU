@@ -108,7 +108,29 @@ int main()
 		(psi_0 * psi_4).printMatrix();
 	}
 	
+	// part 2
+	// for (size_t j = 0; j < psi_0.cols(); j++)
+	// {
+	// 	psi_1(0, j) = "1";
+	// 	psi_9(0, j) = "1";
+	// }
+	// psi_1(0, 6) = "0";
+	// psi_1(0, 7) = "0";
+	// psi_1(0, 8) = "0";
 
+	// psi_9(0, 1) = "1";
+	// psi_9(0, 6) = "0";
+	// psi_9(0, 7) = "0";
+	// psi_9(0, 8) = "0";
+
+	// (psi_1 * psi_9).orthogonalize().printMatrix();
+
+	// std::cout << "---------" << std::endl;
+
+	// BooleanMatrix psi_1_0(1, 10);
+	// psi_1_0 = psi_1;
+	// psi_1_0(0, 1) = "0";
+	// (psi_1_0).printMatrix();
 
 	return (0);
 }
