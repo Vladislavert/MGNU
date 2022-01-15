@@ -5,104 +5,110 @@
 
 int main()
 {
-	BooleanMatrix res;
-	// BooleanMatrix a(1, 3);
-	// BooleanMatrix b(1, 3);
+	BooleanMatrix ret;
 
-	BooleanMatrix f1(5, 3);
-	BooleanMatrix f2(1, 3);
-	BooleanMatrix f3(1, 3);
+	// initialize
+	BooleanMatrix psi_0(1, 10);
+	BooleanMatrix psi_1(1, 10);
+	BooleanMatrix psi_2(1, 10);
+	BooleanMatrix psi_3(1, 10);
+	BooleanMatrix psi_4(1, 10);
+	BooleanMatrix psi_5(1, 10);
+	BooleanMatrix psi_6(1, 10);
+	BooleanMatrix psi_7(1, 10);
+	BooleanMatrix psi_8(1, 10);
+	BooleanMatrix psi_9(1, 10);
+	BooleanMatrix psi_10(2, 10);
+	BooleanMatrix psi_11(1, 10);
+	BooleanMatrix psi_12(9, 10);
+
+	for (size_t j = 0; j < psi_0.cols(); j++)
+	{
+		psi_0(0, j) = "1";
+		psi_1(0, j) = "1";
+		psi_2(0, j) = "1";
+		psi_3(0, j) = "1";
+		psi_4(0, j) = "1";
+		psi_5(0, j) = "1";
+		psi_6(0, j) = "1";
+		psi_7(0, j) = "1";
+		psi_8(0, j) = "1";
+		psi_9(0, j) = "1";
+		psi_10(0, j) = "1";
+		psi_10(1, j) = "1";
+		psi_11(0, j) = "1";
+	}
+	psi_1(0, 7) = "0";
+	psi_2(0, 6) = "0";
+	psi_3(0, 4) = "0";
+
+	psi_4(0, 6) = "0";
+	psi_4(0, 7) = "0";
+
+	psi_5(0, 4) = "0";
+	psi_5(0, 7) = "0";
+
+	psi_6(0, 4) = "0";
+	psi_6(0, 6) = "0";
+
+	psi_7(0, 4) = "-";
+
+	psi_8(0, 4) = "-";
+	psi_8(0, 7) = "0";
+
+	psi_9(0, 4) = "0";
+	psi_9(0, 6) = "0";
+	psi_9(0, 7) = "0";
+
+	psi_10(0, 1) = "0";
+	psi_10(0, 6) = "-";
+	psi_10(0, 7) = "-";
+	psi_10(0, 8) = "-";
+
+	psi_10(1, 6) = "-";
+	psi_10(1, 7) = "-";
+	psi_10(1, 8) = "0";
+
+	psi_11(1, 4) = "-";
+	psi_11(1, 5) = "0";
+	psi_11(1, 6) = "0";
+
+	for (size_t i = 0; i < psi_12.rows(); i++)
+		for (size_t j = 0; j < psi_12.cols(); j++)
+			psi_12(i, j) = "-";
+	psi_12(0, 0) = "0";
+	psi_12(1, 2) = "0";
+	psi_12(2, 3) = "0";
+	psi_12(3, 9) = "0";
+	psi_12(4, 1) = "0";
+	psi_12(4, 4) = "0";
+	psi_12(5, 4) = "0";
+	psi_12(5, 8) = "0";
+	psi_12(6, 1) = "0";
+	psi_12(6, 5) = "0";
+	psi_12(7, 5) = "0";
+	psi_12(7, 8) = "0";
+	psi_12(8, 5) = "0";
+	psi_12(8, 6) = "0";
+	psi_12(8, 7) = "0";
+
+	// end initialize
+
+	psi_12.negation().orthogonalize().printMatrix();
 
 
-	// f1(0, 0) = "1";
-	// f1(0, 1) = "-";
-	// f1(0, 2) = "1";
+	// check lab_4
 
-	// f1(1, 0) = "0";
-	// f1(1, 1) = "1";
-	// f1(1, 2) = "0";
+	for (size_t i = 0; i < psi_0.cols(); i++)
+	{
+		psi_0(0, i) = "1";
+		psi_0(0, i) = "0";
+	
+		std::cout << "elements_" << i << ": ";
+		(psi_0 * psi_4).printMatrix();
+	}
+	
 
-	// f1(2, 0) = "1";
-	// f1(2, 1) = "1";
-	// f1(2, 2) = "0";
-
-	// f1(3, 0) = "0";
-	// f1(3, 1) = "1";
-	// f1(3, 2) = "1";
-
-	// f2(0, 0) = "1";
-	// f2(0, 1) = "1";
-	// f2(0, 2) = "1";
-
-
-	f1(0, 0) = "-";
-	f1(0, 1) = "-";
-	f1(0, 2) = "1";
-
-	f1(1, 0) = "0";
-	f1(1, 1) = "1";
-	f1(1, 2) = "1";
-
-	f1(2, 0) = "0";
-	f1(2, 1) = "0";
-	f1(2, 2) = "0";
-
-	f1(3, 0) = "0";
-	f1(3, 1) = "0";
-	f1(3, 2) = "1";
-
-
-	f1(4, 0) = "0";
-	f1(4, 1) = "0";
-	f1(4, 2) = "0";
-
-	f1(5, 0) = "-";
-	f1(5, 1) = "-";
-	f1(5, 2) = "1";
-
-	f2(0, 0) = "-";
-	f2(0, 1) = "-";
-	f2(0, 2) = "0";
-
-	// f2(1, 0) = "0";
-	// f2(1, 1) = "1";
-	// f2(1, 2) = "-";
-
-
-	f3(0, 0) = "1";
-	f3(0, 1) = "-";
-	f3(0, 2) = "-";
-
-
-	// res = f1 * f2.negation() * f3;
-	res = f1;
-	// res *= f2;
-	// res *= f3;
-	std::cout << "product f1 * f2 * f3 (" <<  res.rows() << "x" << res.cols() << "):" << std::endl;
-	// res = res * f3;
-	std::cout << "res" << std::endl;
-	res.printMatrix();
-	std::cout << std::endl;
-	res.orthogonalize().printMatrix();
-	std::cout << std::endl;
-
-	// res = a + b;
-	// std::cout << "sum(" <<  res.rows() << "x" << res.cols() << "):" << std::endl;
-	// res.printMatrix();
-	// std::cout << std::endl;
-
-
-	// BooleanMatrix matrix(2, 3);
-
-	// matrix(0, 0) = "0";
-	// matrix(0, 1) = "1";
-	// matrix(0, 2) = "-";
-	// matrix(1, 0) = "1";
-	// matrix(1, 1) = "-";
-	// matrix(1, 2) = "0";
-
-	// std::cout << "negation:" << std::endl;
-	// f3.negation().printMatrix();
 
 	return (0);
 }
