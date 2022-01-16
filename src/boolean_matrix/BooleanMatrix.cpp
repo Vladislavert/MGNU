@@ -51,7 +51,19 @@ BooleanMatrix		BooleanMatrix::operator*(const BooleanMatrix& matrix)
 	uint_t				retSizeRows = calculateSizeRows(sizeRows_, matrix.sizeRows_);
 	BooleanMatrix		retMatrix(retSizeRows, sizeCols_);
 	std::vector<uint_t>	indexDelete;
-
+	
+	if (this[0] == kEmpty)
+	{
+		return (getEmptyMatrix());
+	}
+	else if (matrix(0, 0) == kEmpty)
+	{
+		return (getEmptyMatrix());
+	}
+	else if (this[0] == kEmpty && matrix(0, 0) == kEmpty)
+	{
+		return (getEmptyMatrix());
+	}
 	for (uint_t iRows = 0; iRows < sizeRows_; iRows++) // перебор по строкам 1-ой матрицы
 	{
 		for (uint_t kRows = 0; kRows < matrix.sizeRows_; kRows++) // перебор по строкам 2-ой матрицы
@@ -74,11 +86,7 @@ BooleanMatrix		BooleanMatrix::operator*(const BooleanMatrix& matrix)
 	}
 	if (retMatrix.sizeRows_ == 0)
 	{
-		BooleanMatrix retEmptyMatrix(1, 1);
-
-		retEmptyMatrix(0, 0) = kEmpty;
-
-		return (retEmptyMatrix);
+		return (getEmptyMatrix());
 	}
 	retMatrix.orthogonalize();
 
@@ -99,6 +107,12 @@ BooleanMatrix		BooleanMatrix::operator+(const BooleanMatrix& matrix)
 {
 	BooleanMatrix	retMatrix(sizeRows_ + matrix.sizeRows_, 1);
 
+	if (this[0] == kEmpty)
+		return (matrix);
+	else if (matrix(0, 0) == kEmpty)
+		return (*this);
+	else if (this[0] == kEmpty && matrix(0, 0) == kEmpty)
+		return (getEmptyMatrix());
 	for (uint_t iRows = 0; iRows < sizeRows_; iRows++)
 		retMatrix.matrix_[iRows] = matrix_[iRows];
 	for (uint_t iRows = sizeRows_, iRowsNext = 0; iRowsNext < matrix.sizeRows_; iRows++, iRowsNext++)
@@ -329,6 +343,15 @@ BooleanMatrix		BooleanMatrix::col(uint_t index)
 	}
 
 	return (retCol);
+}
+
+BooleanMatrix		BooleanMatrix::getEmptyMatrix() const
+{
+	BooleanMatrix retEmptyMatrix(1, 1);
+
+	retEmptyMatrix(0, 0) = kEmpty;
+
+	return (retEmptyMatrix);
 }
 
 /**

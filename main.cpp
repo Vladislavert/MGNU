@@ -5,104 +5,53 @@
 
 int main()
 {
-	BooleanMatrix res;
-	// BooleanMatrix a(1, 3);
-	// BooleanMatrix b(1, 3);
+	BooleanMatrix ret;
 
-	BooleanMatrix f1(5, 3);
-	BooleanMatrix f2(1, 3);
-	BooleanMatrix f3(1, 3);
+	// initialize
+	// BooleanMatrix psi_0(2, 3);
+	// BooleanMatrix psi_1(1, 3);
+	// BooleanMatrix psi_2(1, 10);
 
+	// psi_0(0, 0) = "0";
+	// psi_0(0, 1) = "1";
+	// psi_0(0, 2) = "-";
 
-	// f1(0, 0) = "1";
-	// f1(0, 1) = "-";
-	// f1(0, 2) = "1";
+	// psi_0(1, 0) = "1";
+	// psi_0(1, 1) = "-";
+	// psi_0(1, 2) = "0";
 
-	// f1(1, 0) = "0";
-	// f1(1, 1) = "1";
-	// f1(1, 2) = "0";
+	// psi_1(0, 0) = "-";
+	// psi_1(0, 1) = "1";
+	// psi_1(0, 2) = "0";
 
-	// f1(2, 0) = "1";
-	// f1(2, 1) = "1";
-	// f1(2, 2) = "0";
+	BooleanMatrix psi_1(1, 6);
+	BooleanMatrix psi_2(1, 6);
+	BooleanMatrix psi_3(1, 6);
+	BooleanMatrix psi_4(1, 6);
+	BooleanMatrix psi_5(1, 6);
+	BooleanMatrix psi_6(1, 6);
 
-	// f1(3, 0) = "0";
-	// f1(3, 1) = "1";
-	// f1(3, 2) = "1";
+	for (size_t i = 0; i < psi_1.cols(); i++)
+	{
+		psi_1(0, i) = "0";
+		psi_2(0, i) = "0";
+		psi_3(0, i) = "0";
+		psi_4(0, i) = "0";
+		psi_5(0, i) = "0";
+		psi_6(0, i) = "0";
+	}
+	
 
-	// f2(0, 0) = "1";
-	// f2(0, 1) = "1";
-	// f2(0, 2) = "1";
+	psi_1(0,0) = "1";
+	psi_2(0, 1) = "1";
+	psi_3(0, 2) = "1";
+	psi_4(0, 3) = "1";
+	psi_5(0, 4) = "1";
+	psi_6(0, 5) = "1";
 
+	// (psi_1 + (psi_2 * psi_3) + (psi_4 * psi_5 * psi_6)).printMatrix();
+	(psi_1 * (psi_2 * psi_3)).printMatrix();
 
-	f1(0, 0) = "-";
-	f1(0, 1) = "-";
-	f1(0, 2) = "1";
-
-	f1(1, 0) = "0";
-	f1(1, 1) = "1";
-	f1(1, 2) = "1";
-
-	f1(2, 0) = "0";
-	f1(2, 1) = "0";
-	f1(2, 2) = "0";
-
-	f1(3, 0) = "0";
-	f1(3, 1) = "0";
-	f1(3, 2) = "1";
-
-
-	f1(4, 0) = "0";
-	f1(4, 1) = "0";
-	f1(4, 2) = "0";
-
-	f1(5, 0) = "-";
-	f1(5, 1) = "-";
-	f1(5, 2) = "1";
-
-	f2(0, 0) = "-";
-	f2(0, 1) = "-";
-	f2(0, 2) = "0";
-
-	// f2(1, 0) = "0";
-	// f2(1, 1) = "1";
-	// f2(1, 2) = "-";
-
-
-	f3(0, 0) = "1";
-	f3(0, 1) = "-";
-	f3(0, 2) = "-";
-
-
-	// res = f1 * f2.negation() * f3;
-	res = f1;
-	// res *= f2;
-	// res *= f3;
-	std::cout << "product f1 * f2 * f3 (" <<  res.rows() << "x" << res.cols() << "):" << std::endl;
-	// res = res * f3;
-	std::cout << "res" << std::endl;
-	res.printMatrix();
-	std::cout << std::endl;
-	res.orthogonalize().printMatrix();
-	std::cout << std::endl;
-
-	// res = a + b;
-	// std::cout << "sum(" <<  res.rows() << "x" << res.cols() << "):" << std::endl;
-	// res.printMatrix();
-	// std::cout << std::endl;
-
-
-	// BooleanMatrix matrix(2, 3);
-
-	// matrix(0, 0) = "0";
-	// matrix(0, 1) = "1";
-	// matrix(0, 2) = "-";
-	// matrix(1, 0) = "1";
-	// matrix(1, 1) = "-";
-	// matrix(1, 2) = "0";
-
-	// std::cout << "negation:" << std::endl;
-	// f3.negation().printMatrix();
 
 	return (0);
 }

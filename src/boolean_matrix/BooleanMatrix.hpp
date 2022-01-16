@@ -35,6 +35,7 @@ class BooleanMatrix
 		uint_t					cols() const;
 		BooleanMatrix			row(uint_t index);
 		BooleanMatrix			col(uint_t index);
+		BooleanMatrix			getEmptyMatrix() const; 
 
 	private:
 		std::vector<std::vector<std::string>>	matrix_;
