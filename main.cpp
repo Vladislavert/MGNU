@@ -33,24 +33,30 @@ int main()
 
 	for (size_t i = 0; i < psi_1.cols(); i++)
 	{
-		psi_1(0, i) = "0";
-		psi_2(0, i) = "0";
-		psi_3(0, i) = "0";
-		psi_4(0, i) = "0";
-		psi_5(0, i) = "0";
-		psi_6(0, i) = "0";
+		psi_1(0, i) = "-";
+		psi_2(0, i) = "-";
+		psi_3(0, i) = "-";
+		psi_4(0, i) = "-";
+		psi_5(0, i) = "-";
+		psi_6(0, i) = "-";
 	}
 	
 
-	psi_1(0,0) = "1";
+	psi_1(0, 0) = "1";
 	psi_2(0, 1) = "1";
 	psi_3(0, 2) = "1";
 	psi_4(0, 3) = "1";
 	psi_5(0, 4) = "1";
 	psi_6(0, 5) = "1";
 
-	// (psi_1 + (psi_2 * psi_3) + (psi_4 * psi_5 * psi_6)).printMatrix();
-	(psi_1 * (psi_2 * psi_3)).printMatrix();
+	// (psi_1 + (psi_2 * psi_3) + (psi_4 * psi_5 * psi_6)).orthogonalize().printMatrix();
+	ret = (psi_1 + (psi_2 * psi_3) + (psi_4 * psi_5 * psi_6));
+	ret.printMatrix();
+	std::cout << "-------------------------" << std::endl;
+	// TODO(Vladislvaert): ПРоверить корректность работы ортоганализации
+	ret.orthogonalize().printMatrix();
+	// (psi_1 * (psi_2 * psi_3)).printMatrix();
+
 
 
 	return (0);

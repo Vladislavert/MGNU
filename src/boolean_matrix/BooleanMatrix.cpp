@@ -119,7 +119,7 @@ BooleanMatrix		BooleanMatrix::operator+(const BooleanMatrix& matrix)
 		retMatrix.matrix_[iRows] = matrix.matrix_[iRowsNext];
 	retMatrix.sizeRows_ = sizeRows_ + matrix.sizeRows_;
 	retMatrix.sizeCols_ = sizeCols_;
-	retMatrix.orthogonalize();
+	// retMatrix.orthogonalize();
 
 	return (retMatrix);
 }
